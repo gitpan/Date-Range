@@ -37,7 +37,7 @@ use strict;
 use Carp;
 use vars qw/$VERSION/;
 
-$VERSION = '1.0';
+$VERSION = '1.1';
 
 sub want_class { 'Date::Simple' }
 
@@ -133,8 +133,8 @@ and access this overlap range.
 sub overlaps { 
   my ($self, $check) = @_;
   return unless UNIVERSAL::isa($check => 'Date::Range');
-  return $check->includes($self->start) or $check->includes($self->end) 
-      or $self->includes($check);
+  return $check->includes($self->start) || $check->includes($self->end) 
+      || $self->includes($check);
 }
 
 sub overlap { 

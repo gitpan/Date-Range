@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 38;
+use Test::More tests => 40;
 use Date::Simple;
 use Date::Range;
 
@@ -60,8 +60,8 @@ ok($range3->includes($range3), "Range includes itself");
 #-------------------------------------------------------------------------
 
 { 
-  my $range = Date::Range->new($date2, $date3);
-  ok($range->overlaps($range1), "The ranges overlap");
+  my $range = Date::Range->new($date3, $date2);
+  ok($range->overlaps($range1), "The ranges overlap the other way");
   ok(my $overlap = $range->overlap($range1), "Get that overlap");
   is($overlap->start, $date2, "Starts on day2");
   is($overlap->end, $date2, "Ends on day2");
@@ -73,5 +73,13 @@ ok($range3->includes($range3), "Range includes itself");
   ok(my $overlap = $range->overlap($range3), "Get that overlap");
   is($overlap->start, $date2, "Starts on day2");
   is($overlap->end, $date3, "Ends on day3");
+}
+
+{ # ranges overlap
+	my $planrange = Date::Range->new(map Date::Simple->new($_), '2003-03-08', '2003-07-15');
+	my $billrange = Date::Range->new(map Date::Simple->new($_), '2003-03-21', '2003-04-20');
+
+	ok $billrange->overlaps($planrange), "Overlaps one way";
+	ok $planrange->overlaps($billrange), "and the other...";
 }
 

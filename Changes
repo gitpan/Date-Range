@@ -1,5 +1,8 @@
 Revision history for Perl library Date::Range
 
+1.1   Wed Jul 16 2003
+	- fix bug with overlapping ranges (Kerrin Pine)
+
 1.0   Tue Feb 25 2003
 	- abstract Date::Simple code to make it easier to subclass
 
