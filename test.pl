@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 32;
+use Test::More tests => 36;
 use Date::Simple;
 use Date::Range;
 
@@ -25,12 +25,17 @@ ok($@, "Can't create a range with strings");
   ok(my $range = Date::Range->new($date1, $date1), "Create an single day range");
   is($range->start, $range->end, "Start and end on same date");
   is($range->length, 1, "1 day long");
+  is($range->dates, 1, "So 1 date in 'dates'");
 }
 
 ok(my $range1 = Date::Range->new($date1, $date2), "Create a range");
 is($range1->start, $date1, "Starts OK");
 is($range1->end, $date2, "Starts OK");
 is($range1->length, 2, "2 days long");
+my @dates = $range1->dates;
+is(@dates, 2, "So 2 date in 'dates'");
+is($dates[0], $range1->start, "Starts at start");
+is($dates[1], $range1->end, "And ends at end");
 
 ok(my $range2 = Date::Range->new($date2, $date1), "Create a range in wrong order");
 is($range2->start, $date1, "Starts OK");
@@ -67,5 +72,4 @@ ok($range3->includes($range3), "Range includes itself");
   is($overlap->start, $date2, "Starts on day2");
   is($overlap->end, $date3, "Ends on day3");
 }
-
 

@@ -1,5 +1,8 @@
 Revision history for Perl library Date::Range
 
+0.8   2002-03-07 
+	- added "dates" method
+
 0.01  2001-07-07 
 	- original version
 

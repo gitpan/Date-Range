@@ -21,6 +21,7 @@ Date::Range - deal with a range of dates
     my $range3 = $range->overlap($range2);
   }
 
+  foreach my $date ($range->dates) { ... }
 
 =head1 DESCRIPTION
 
@@ -36,7 +37,7 @@ use strict;
 use Carp;
 use vars qw/$VERSION/;
 
-$VERSION = '0.01';
+$VERSION = '0.8';
 
 =head1 METHODS
 
@@ -143,6 +144,22 @@ sub overlap {
   my @dates = sort { $a <=> $b } $self->start, $self->end, 
                                  $check->start, $check->end;
   return $self->new(@dates[1..2]);
+}
+
+=head2 dates
+
+  foreach my $date ($range->dates) { ... }
+
+This returns a list of each date in the range as a Date::Simple object.
+
+=cut
+
+sub dates {
+  my $self = shift;
+  my @dates; 
+  my $start = $self->start;
+  push @dates, $start++ for 1 .. $self->length;
+  return @dates;
 }
 
 1;
