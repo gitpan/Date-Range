@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 40;
+use Test::More tests => 55;
 use Date::Simple;
 use Date::Range;
 
@@ -82,4 +82,46 @@ ok($range3->includes($range3), "Range includes itself");
 	ok $billrange->overlaps($planrange), "Overlaps one way";
 	ok $planrange->overlaps($billrange), "and the other...";
 }
+
+#-------------------------------------------------------------------------
+# Test Gap / abuts
+#-------------------------------------------------------------------------
+
+{
+
+	my $jan = Date::Range->new(
+		map Date::Simple->new($_), '2004-01-01', '2004-01-31'
+	);
+
+	my $mar = Date::Range->new(
+		map Date::Simple->new($_), '2004-03-01', '2004-03-31'
+	);
+
+	my $feb = $jan->gap($mar) or die "Can't get gap";
+	isa_ok $feb => 'Date::Range';
+	is $feb->start, "2004-02-01", "Starts start Feb";
+	is $feb->end, "2004-02-29", "Ends end Feb";
+
+	my $feb2 = $mar->gap($jan);
+	ok $feb2->equals($feb), "Gap works either way around";
+
+	my $fj = $jan->gap($feb);
+	ok !$jan->gap($feb), "Jan has no gap to Feb";
+	ok !$feb->gap($mar), "Feb has no gap to Mar";
+
+	ok !$jan->abuts($jan), "Abuts J/J - no";
+	ok $jan->abuts($feb), "Abuts J/F - yes";
+	ok !$jan->abuts($mar), "Abuts J/M - no";
+
+	ok $feb->abuts($jan), "Abuts F/J - yes";
+	ok !$feb->abuts($feb), "Abuts F/F - no";
+	ok $feb->abuts($mar), "Abuts F/M - yes";
+
+	ok !$mar->abuts($jan), "Abuts M/J - no";
+	ok $mar->abuts($feb), "Abuts M/F - yes";
+	ok !$mar->abuts($mar), "Abuts M/M - no";
+
+}
+
+
 

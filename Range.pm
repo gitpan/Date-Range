@@ -37,7 +37,7 @@ use strict;
 use Carp;
 use vars qw/$VERSION/;
 
-$VERSION = '1.1';
+$VERSION = '1.2';
 
 sub want_class { 'Date::Simple' }
 
@@ -146,6 +146,38 @@ sub overlap {
   return $self->new(@dates[1..2]);
 }
 
+=head2 gap
+
+	my $range3 = $range->gap($range2);
+
+This returns a new range representing the gap between two other ranges.
+
+=cut
+
+sub gap {
+	my ($self, $range) = @_;
+	return if $self->overlaps($range);
+  my @sorted = sort { $a->start <=> $b->start } ($self, $range);
+	my $start = $sorted[0]->end + $self->_day_length;
+	my $end = $sorted[1]->start - $self->_day_length;
+	return if $start >= $end;
+	return $self->new($start, $end);
+}
+
+=head2 abuts
+
+	if ($range->abuts($range2)) { ... }
+
+This tells you whether or not two ranges are contiguous - i.e. there is
+no gap between them, but they do not overlap.
+
+=cut
+
+sub abuts { 
+	my ($self, $range) = @_;
+	return ! ($self->overlaps($range) || $self->gap($range));
+}
+
 =head2 dates
 
   foreach my $date ($range->dates) { ... }
@@ -164,7 +196,6 @@ sub dates {
   }
   return @dates;
 }
-
 
 1;
 
