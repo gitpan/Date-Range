@@ -37,7 +37,9 @@ use strict;
 use Carp;
 use vars qw/$VERSION/;
 
-$VERSION = '0.9';
+$VERSION = '1.0';
+
+sub want_class { 'Date::Simple' }
 
 =head1 METHODS
 
@@ -55,7 +57,7 @@ These dates must be instances of the Date::Simple class.
 sub new {
   my $that = shift;
   my $class = ref($that) || $that;
-  my @dates = sort { $a <=> $b } grep $_->isa("Date::Simple"), @_;
+  my @dates = sort { $a <=> $b } grep UNIVERSAL::isa($_ => $class->want_class), @_;
   croak "You must create a range from two date objects" unless (@dates == 2);
   my $self = bless {
     _start => $dates[0],
@@ -77,7 +79,9 @@ and the number of days in the range.
 
 sub start  { $_[0]->{_start} }
 sub end    { $_[0]->{_end}   }
-sub length { $_[0]->end - $_[0]->start + 1 }
+sub length { (int ($_[0]->end - $_[0]->start) / $_[0]->_day_length)  +1 }
+
+sub _day_length { 1 }
 
 =head2 equals
 
@@ -89,9 +93,8 @@ the same dates.
 =cut
 
 sub equals {
-  my $self = shift;
-  my $check = shift;
-  return unless $check->isa('Date::Range');
+  my ($self, $check) = @_;
+  return unless UNIVERSAL::isa($check => 'Date::Range');
   return $self->start == $check->start and $self->end == $check->end;
 }
 
@@ -106,11 +109,10 @@ or a given range.
 =cut
 
 sub includes {
-  my $self = shift;
-  my $check = shift;
-  if ($check->isa('Date::Range')) {
+  my ($self, $check) = @_;
+  if (UNIVERSAL::isa($check => 'Date::Range')) {
     return $self->includes($check->start) && $self->includes($check->end);
-  } elsif ($check->isa('Date::Simple')) {
+  } elsif ($check->isa($self->want_class)) {
     return $self->start <= $check && $check <= $self->end;
   } else {
     croak "Ranges can only include dates or ranges";
@@ -129,17 +131,15 @@ and access this overlap range.
 =cut
 
 sub overlaps { 
-  my $self = shift;
-  my $check = shift;
-  return unless $check->isa('Date::Range');
+  my ($self, $check) = @_;
+  return unless UNIVERSAL::isa($check => 'Date::Range');
   return $check->includes($self->start) or $check->includes($self->end) 
       or $self->includes($check);
 }
 
 sub overlap { 
-  my $self = shift;
-  my $check = shift;
-  return unless $check->isa('Date::Range');
+  my ($self, $check) = @_;
+  return unless UNIVERSAL::isa($check => 'Date::Range');
   return unless $self->overlaps($check);
   my @dates = sort { $a <=> $b } $self->start, $self->end, 
                                  $check->start, $check->end;
@@ -156,11 +156,15 @@ This returns a list of each date in the range as a Date::Simple object.
 
 sub dates {
   my $self = shift;
-  my @dates; 
+  my @dates;
   my $start = $self->start;
-  push @dates, $start++ for 1 .. $self->length;
+  for (1..$self->length) {
+      push @dates, $start;
+      $start += $self->_day_length;
+  }
   return @dates;
 }
+
 
 1;
 
@@ -170,13 +174,13 @@ None known.
 
 =head1 AUTHOR
 
-Tony Bowden, E<lt>tony@tmtm.comE<gt>, based heavily on
+Tony Bowden, E<lt>cpan@tmtm.comE<gt>, based heavily on
 Martin Fowler's "Analysis Patterns 2" discussion and code at
 http://www.martinfowler.com/ap2/range.html
 
 =head1 COPYRIGHT
 
-Copyright (C) 2001 Tony Bowden. All rights reserved.
+Copyright (C) 2001-2003 Tony Bowden. All rights reserved.
 
 This module is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
