@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 36;
+use Test::More tests => 38;
 use Date::Simple;
 use Date::Range;
 
@@ -46,9 +46,11 @@ ok($range1->equals($range2), "Range 1 and 2 are equal");
 ok(my $range3 = Date::Range->new($date1, $date3), "Longer Range");
 is($range3->length, 3, "3 days long");
 
+ok(!$range3->includes($date1 - 1), "Range doesn't include early day");
 ok($range3->includes($date1), "Range includes first day");
 ok($range3->includes($date2), "Range includes middle day");
 ok($range3->includes($date3), "Range includes last day");
+ok(!$range3->includes($date3 + 1), "Range doesn't includes later day");
 ok($range3->includes($range1), "Range includes first range");
 ok($range3->includes($range2), "Range includes second range");
 ok($range3->includes($range3), "Range includes itself");

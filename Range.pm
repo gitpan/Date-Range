@@ -37,7 +37,7 @@ use strict;
 use Carp;
 use vars qw/$VERSION/;
 
-$VERSION = '0.8';
+$VERSION = '0.9';
 
 =head1 METHODS
 
@@ -109,9 +109,9 @@ sub includes {
   my $self = shift;
   my $check = shift;
   if ($check->isa('Date::Range')) {
-    return $self->includes($check->start) and $self->includes($check->end);
+    return $self->includes($check->start) && $self->includes($check->end);
   } elsif ($check->isa('Date::Simple')) {
-    return $self->start <= $check and $check <= $self->end;
+    return $self->start <= $check && $check <= $self->end;
   } else {
     croak "Ranges can only include dates or ranges";
   }
