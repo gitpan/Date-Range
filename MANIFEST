@@ -1,5 +1,8 @@
 Changes
-MANIFEST
+lib/Date/Range.pm
 Makefile.PL
-Range.pm
-test.pl
+MANIFEST			This list of files
+META.yml
+t/01.t
+t/pod-coverage.t
+t/pod.t

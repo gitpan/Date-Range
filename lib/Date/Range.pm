@@ -33,13 +33,11 @@ lets you ask such questions.
 
 =cut
 
+$VERSION = '1.3';
+
 use strict;
 use Carp;
-use vars qw/$VERSION/;
 
-$VERSION = '1.2';
-
-sub want_class { 'Date::Simple' }
 
 =head1 METHODS
 
@@ -50,7 +48,14 @@ sub want_class { 'Date::Simple' }
 A range object is instantiated with two dates, which do not need
 to be in chronological order (we'll sort all that out internally).
 
-These dates must be instances of the Date::Simple class.
+These dates must be instances of the want_class().
+
+=head2 want_class
+
+The class of which we expect the data objects to be objects. By default
+this is Date::Simple, but this could be any other date class. See
+L<Time::Piece::Range> for an example of a subclass using a different
+class.
 
 =cut
 
@@ -66,7 +71,9 @@ sub new {
   return $self;
 }
 
-=head2 start() / end()
+sub want_class { 'Date::Simple' }
+
+=head2 start / end / length
 
   my $earliest = $range->start;
   my $latest   = $range->end;
@@ -199,21 +206,26 @@ sub dates {
 
 1;
 
-=head1 BUGS
-
-None known.
-
 =head1 AUTHOR
 
-Tony Bowden, E<lt>cpan@tmtm.comE<gt>, based heavily on
-Martin Fowler's "Analysis Patterns 2" discussion and code at
-http://www.martinfowler.com/ap2/range.html
+Tony Bowden, based heavily on Martin Fowler's "Analysis Patterns 2"
+discussion and code at http://www.martinfowler.com/ap2/range.html
 
-=head1 COPYRIGHT
+=head1 BUGS and QUERIES
 
-Copyright (C) 2001-2003 Tony Bowden. All rights reserved.
+Please direct all correspondence regarding this module to:
+  bug-Date-Range@rt.cpan.org
 
-This module is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+=head1 COPYRIGHT AND LICENSE
+
+  Copyright (C) 2001-2005 Tony Bowden.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License; either version
+  2 of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
