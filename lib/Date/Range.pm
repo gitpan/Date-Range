@@ -33,7 +33,7 @@ lets you ask such questions.
 
 =cut
 
-$VERSION = '1.35';
+$VERSION = '1.40';
 
 use strict;
 use Carp;
