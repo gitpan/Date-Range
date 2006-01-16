@@ -2,7 +2,7 @@ package Date::Range;
 
 =head1 NAME
 
-Date::Range - deal with a range of dates
+Date::Range - work with a range of dates
 
 =head1 SYNOPSIS
 
@@ -33,7 +33,7 @@ lets you ask such questions.
 
 =cut
 
-$VERSION = '1.3';
+$VERSION = '1.35';
 
 use strict;
 use Carp;
@@ -48,14 +48,15 @@ use Carp;
 A range object is instantiated with two dates, which do not need
 to be in chronological order (we'll sort all that out internally).
 
-These dates must be instances of the want_class().
+These dates must be instances of the correct object. See want_class()
+below.
 
 =head2 want_class
 
-The class of which we expect the data objects to be objects. By default
-this is Date::Simple, but this could be any other date class. See
-L<Time::Piece::Range> for an example of a subclass using a different
-class.
+The class of which we expect the date objects to be objects. By default
+this is L<Date::Simple>, but this could be any other date class. See
+L<Time::Piece::Range> for an example of a subclass that uses a different
+date class.
 
 =cut
 
@@ -218,7 +219,7 @@ Please direct all correspondence regarding this module to:
 
 =head1 COPYRIGHT AND LICENSE
 
-  Copyright (C) 2001-2005 Tony Bowden.
+  Copyright (C) 2001-2006 Tony Bowden.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License; either version
