@@ -33,7 +33,7 @@ lets you ask such questions.
 
 =cut
 
-$VERSION = '1.40';
+$VERSION = '1.41';
 
 use strict;
 use Carp;
@@ -103,7 +103,7 @@ the same dates.
 sub equals {
   my ($self, $check) = @_;
   return unless UNIVERSAL::isa($check => 'Date::Range');
-  return $self->start == $check->start and $self->end == $check->end;
+  return ($self->start == $check->start and $self->end == $check->end);
 }
 
 =head2 includes

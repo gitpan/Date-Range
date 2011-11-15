@@ -1,12 +1,23 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Date-Range
-version:      1.40
-version_from: lib/Date/Range.pm
-installdirs:  site
+--- #YAML:1.0
+name:               Date-Range
+version:            1.41
+abstract:           work with a range of dates
+author:
+    - Tony Bowden <kasei@tmtm.com>
+license:            unknown
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
 requires:
-    Date::Simple:                  0.03
-    Test::More:                    0.04
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+    Date::Simple:  0.03
+    Test::More:    0.04
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.56
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4

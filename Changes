@@ -1,5 +1,8 @@
 Revision history for Perl library Date::Range
 
+1.41  Tue 15 Nov 2011 
+	- fix precedence bug in equals() (Zhen Xie)
+
 1.40 Mon Jan 16 2006
 	- Doc tweaks
 

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 55;
+use Test::More tests => 56;
 use Date::Simple;
 use Date::Range;
 
@@ -123,5 +123,21 @@ ok($range3->includes($range3), "Range includes itself");
 
 }
 
+#-------------------------------------------------------------------------
+# equals
+#-------------------------------------------------------------------------
 
+{
+  # regression: ranges with same start date were equal
+
+	my $jan = Date::Range->new(
+		map Date::Simple->new($_), '2011-01-01', '2011-01-31'
+	);
+
+	my $year = Date::Range->new(
+		map Date::Simple->new($_), '2011-01-01', '2011-12-31'
+	);
+
+  ok !$jan->equals($year);
+}
 
